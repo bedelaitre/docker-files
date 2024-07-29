@@ -1,0 +1,44 @@
+FROM ubuntu
+	
+# set version label
+ARG BUILD_DATE="2024-07-25"
+ARG VERSION=1.0
+ARG OPENVPNAS_VERSION 
+LABEL build_version="Bedelaitre version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="bedelaitre"
+
+# environment settings
+ARG DEBIAN_FRONTEND="noninteractive"
+
+RUN \
+    apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y \
+    openvpn \
+    curl \
+    && rm -rf \
+        /tmp/* \
+    && rm -rf \
+        /var/lib/apt/lists/*
+
+RUN \
+    mkdir /data \
+    && chmod 777 /data
+
+COPY \
+    ./data/* /data/
+
+RUN \
+    mkdir /dockerstartup \
+    && chmod 777 /dockerstartup
+
+COPY \
+    ./dockerstartup/* /dockerstartup/
+
+RUN \
+    chmod 777 /dockerstartup/startup.sh
+
+ENTRYPOINT [ "/bin/bash", "-c", "/dockerstartup/startup.sh" ]
+
+
+

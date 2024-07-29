@@ -1,0 +1,32 @@
+Using desktop session xfce
+xauth:  file /home/headless/.Xauthority does not exist
+
+New '7295b686d99b:1 ()' desktop is 7295b686d99b:1
+
+Starting desktop session xfce
+xinit /etc/X11/Xsession startxfce4 -- /usr/bin/Xvnc :1 -depth 24 -geometry 1360x768 -rfbport 5901 -auth /home/headless/.Xauthority -desktop 7295b686d99b:1 () -pn -rfbauth /home/headless/.vnc/passwd
+_XSERVTransmkdir: ERROR: euid != 0,directory /tmp/.X11-unix will not be created.
+
+Xvnc TigerVNC 1.13.1 - built Feb 28 2023 15:34:06
+Copyright (C) 1999-2022 TigerVNC Team and many others (see README.rst)
+See https://www.tigervnc.org for information on TigerVNC.
+Underlying X server release 12013000
+
+
+Sat Jul 20 12:37:43 2024
+ vncext:      VNC extension running!
+ vncext:      Listening for VNC connections on all interface(s), port 5901
+ vncext:      created VNC server for screen 0
+xinit: XFree86_VT property unexpectedly has 0 items instead of 1
+
+Sat Jul 20 12:38:01 2024
+ Connections: accepted: 127.0.0.1::33782
+ SConnection: Client needs protocol version 3.8
+ SConnection: Client requests security type VeNCrypt(19)
+ SVeNCrypt:   Client requests security type VncAuth (2)
+
+Sat Jul 20 12:38:06 2024
+ VNCSConnST:  Server default pixel format depth 24 (32bpp) little-endian rgb888
+ VNCSConnST:  Client pixel format depth 24 (32bpp) little-endian bgr888
+ ComparingUpdateTracker: 0 pixels in / 0 pixels out
+ ComparingUpdateTracker: (1:-nan ratio)

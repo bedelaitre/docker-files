@@ -1,0 +1,21 @@
+Warning: could not find self.pem
+Using local websockify at /usr/libexec/noVNCdim/utils/websockify/run
+Starting webserver and WebSockets proxy on port 6901
+
+
+Navigate to this URL:
+
+    http://7295b686d99b:6901/vnc.html?host=7295b686d99b&port=6901
+
+Press Ctrl-C to exit
+
+
+WebSocket server settings:
+  - Listen on :6901
+  - Web server. Web root: /usr/libexec/noVNCdim
+  - No SSL/TLS support (no cert file)
+  - proxying from :6901 to localhost:5901
+192.168.48.1 - - [20/Jul/2024 12:37:55] code 404, message File not found
+192.168.48.1 - - [20/Jul/2024 12:38:00] 192.168.48.1: Plain non-SSL (ws://) WebSocket connection
+192.168.48.1 - - [20/Jul/2024 12:38:00] 192.168.48.1: Path: '/websockify'
+192.168.48.1 - - [20/Jul/2024 12:38:00] connecting to: localhost:5901

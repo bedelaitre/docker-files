@@ -1,0 +1,31 @@
+[xfdesktop-version-4.10.3+-rcfile_format]
+4.10.3+=true
+
+[/home/headless/Desktop/README]
+row=4
+col=0
+
+[/home/headless/Desktop/firefox.desktop]
+row=3
+col=0
+
+[/home/headless/Desktop/versionsticker.desktop]
+row=2
+col=0
+
+[/home/headless/Desktop/FF Profile Manager.desktop]
+row=5
+col=0
+
+[/home/headless/Desktop/Copy FF Preferences.desktop]
+row=0
+col=1
+
+[/]
+row=0
+col=0
+
+[/home/headless]
+row=1
+col=0
+

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Double Commander
+Comment=Un gestionnaire de fichiers en mode double-panneau
+Exec=/home/headless/doublecmd/doublecmd
+Icon=/home/headless/doublecmd/doublecmd.png
+Terminal=false
+Categories=Accessories;System;
