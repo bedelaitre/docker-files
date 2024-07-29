@@ -45,7 +45,7 @@ FROM ${BASEIMAGE}:${BASETAG} as stage_essentials
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
         gettext-base \
         gir1.2-rsvg-2.0 \
         gpg \
@@ -130,7 +130,7 @@ ENV \
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
         mousepad \
         python3 \
         systemctl \
