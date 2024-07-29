@@ -421,14 +421,15 @@ RUN \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
     &&  apt-get -y autoremove
     
-RUN pwd
-
 RUN \
     chmod 777 "${STARTUPDIR}"/*.sh
-    
+
+RUN \
+    /bin/bash "${STARTUPDIR}"/set_user_permissions.sh
+        
 RUN \
     /bin/bash "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
-
+    
 USER "${HEADLESS_USER_ID}"
 
 ENTRYPOINT [ "/usr/bin/tini", "--", "/dockerstartup/startup.sh" ]
