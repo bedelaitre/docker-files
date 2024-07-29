@@ -23,7 +23,10 @@ FROM ${BASEIMAGE}:${BASETAG} as stage_cache
 ### refresh the 'apt' cache
 RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true" ;' > /etc/apt/apt.conf.d/keep-cache
-RUN apt-get update \
+    
+RUN debconf-set-selections <<< 'tzdata tzdata/Areas select Europe' \
+    && debconf-set-selections <<< 'tzdata tzdata/Zones/Etc select Paris' \
+    && apt-get update \
     && apt-get upgrade
 
 ### embed the local '.g3-cache' from the build context
@@ -106,7 +109,7 @@ ENV FEATURES_BUILD_SLIM_XFCE="${ARG_APT_NO_RECOMMENDS:+1}"
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
 #     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
         xfce4 \
         xfce4-terminal \
         elementary-xfce-icon-theme
@@ -205,7 +208,7 @@ RUN \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/tmp/g3-cache/,target=/tmp/g3-cache/ \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         python3-numpy \
     &&  mkdir -p "${NOVNC_HOME}"/utils/websockify \
     &&  NOVNC_VERSION="${ARG_NOVNC_VERSION}" \
@@ -299,7 +302,7 @@ RUN \
                 -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
                 -P /tmp/g3-cache/chromium ; \
         fi \
-    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
+    &&  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         /tmp/g3-cache/chromium/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
         /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
         /tmp/g3-cache/chromium/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
