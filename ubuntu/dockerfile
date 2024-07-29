@@ -175,7 +175,7 @@ RUN \
                 -q https://sourceforge.net/projects/tigervnc/files/stable/"${TIGERVNC_VERSION}"/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz \
                 -P /tmp/g3-cache/tigervnc ; \
         fi \
-    &&  tar xzf /tmp/g3-cache/tigervnc/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz --strip 1 -C / \
+    &&  tar xzf /tmp/g3-cache/tigervnc/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz --strip 1 -C / > /dev/null 2>&1 \
     &&  ln -s /usr/libexec/vncserver /usr/bin/vncserver \
     &&  sed -i 's/exec(@cmd);/print "@cmd";\nexec(@cmd);/g' /usr/libexec/vncserver
 
