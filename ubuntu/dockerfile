@@ -427,6 +427,10 @@ RUN \
     &&  apt-get -y autoremove
     
 RUN git --version
+
+RUN /dockerstartup/set_user_permissions.sh /dockerstartup
+RUN /dockerstartup/set_user_permissions.sh /home/headless
+
 RUN \
         chmod 777 "${STARTUPDIR}"/*.sh \
     &&  ${STARTUPDIR}/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
