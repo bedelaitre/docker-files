@@ -24,7 +24,7 @@ FROM ${BASEIMAGE}:${BASETAG} as stage_cache
 RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true" ;' > /etc/apt/apt.conf.d/keep-cache
     
-RUN apt hold tzdata
+RUN apt hold tzdata \
     && apt-get update \
     && apt-get upgrade \
     && apt unhold tzdata
