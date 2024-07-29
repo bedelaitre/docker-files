@@ -427,7 +427,7 @@ RUN \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
     &&  apt-get -y autoremove
     
-RUN /dockerstartup/set_user_permissions.sh
+RUN /dockerstartup/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 RUN \
         chmod 777 "${STARTUPDIR}"/*.sh \
     &&  ${STARTUPDIR}/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
