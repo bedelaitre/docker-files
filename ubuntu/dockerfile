@@ -54,19 +54,19 @@ RUN \
         sudo \
         tini \
         wget \
-		xz-utils \
-		nala \
-		cron \
-		dos2unix \
-		dconf-cli \
-		curl \
-		zip \
-		unzip \
-		ffmpeg \
-		tilix \
-		gedit \
-		galculator\
-		expect\
+	xz-utils \
+	nala \
+	cron \
+	dos2unix \
+	dconf-cli \
+	curl \
+	zip \
+	unzip \
+	ffmpeg \
+	tilix \
+	gedit \
+	galculator\
+	expect\
         default-jre \
         net-tools
 
@@ -130,9 +130,9 @@ RUN \
         mousepad \
         python3 \
         systemctl \
-		calibre \
-		doublecmd-qt \
-		soundconverter \
+	calibre \
+	doublecmd-qt \
+	soundconverter \
         openvpn \
 	git \
         "${ARG_FEATURES_SCREENSHOOTING:+ristretto}" \
