@@ -430,7 +430,7 @@ RUN \
 RUN \
         ls -la "${STARTUPDIR}" \
     &&  chmod 777 "${STARTUPDIR}"/*.sh \
-    &&  "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
+    &&  ${STARTUPDIR}/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
 
