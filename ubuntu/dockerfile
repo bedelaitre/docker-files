@@ -426,8 +426,10 @@ RUN \
     &&  echo "${ARG_SUDO_INITIAL_PW:-headless}" > "${STARTUPDIR}"/.initial_sudo_password \
     &&  echo "${HEADLESS_USER_NAME}:$(cat ${STARTUPDIR}/.initial_sudo_password)" | chpasswd \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
-    &&  "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}" \
     &&  apt-get -y autoremove
+
+RUN \
+    "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
 
