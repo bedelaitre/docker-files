@@ -305,8 +305,8 @@ RUN \
         /tmp/g3-cache/chromium/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
     &&  apt-mark hold chromium-browser
 
-COPY ./xfce-chromium/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-chromium/src/home/readme*.md "${HOME}"/
+# COPY ./xfce-chromium/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-chromium/src/home/readme*.md "${HOME}"/
 
 ### Chromium browser requires some presets
 ### Note that 'no-sandbox' flag is required, but intended for development only
@@ -351,7 +351,7 @@ Pin-Priority: 501" \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         firefox
 
-COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
 
 
 ### ##################
@@ -362,9 +362,9 @@ FROM stage_firefox as stage_firefox_plus
 
 ENV FEATURES_FIREFOX_PLUS=1
 
-COPY ./xfce-firefox/src/firefox.plus/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-firefox/src/firefox.plus/resources "${HOME}"/firefox.plus/
-COPY ./xfce-firefox/src/firefox.plus/home/readme*.md "${HOME}"/
+# COPY ./xfce-firefox/src/firefox.plus/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-firefox/src/firefox.plus/resources "${HOME}"/firefox.plus/
+# COPY ./xfce-firefox/src/firefox.plus/home/readme*.md "${HOME}"/
 
 RUN \
     chmod 744 "${HOME}"/firefox.plus/*.sh \
@@ -395,11 +395,11 @@ ENV \
     STARTUPDIR="/dockerstartup"
 
 COPY ./src/xfce-startup "${STARTUPDIR}"/
-COPY ./src/tests "${HOME}"/tests/
+# COPY ./src/tests "${HOME}"/tests/
 
-COPY ./xfce/src/home/config "${HOME}"/.config/
-COPY ./xfce/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce/src/home/readme*.md "${HOME}"/
+# COPY ./xfce/src/home/config "${HOME}"/.config/
+# COPY ./xfce/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce/src/home/readme*.md "${HOME}"/
 
 ### Note that the line 'chmod 666 /etc/passwd /etc/group' sets the "softer" permissions only temporary.
 ### It allows the user generator startup script to configure the user and the group correctly.
