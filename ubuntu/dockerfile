@@ -417,7 +417,7 @@ COPY ./src/xfce-startup "${STARTUPDIR}"/
 ### You have to change it inside the container, if you want to keep it really secret.
 ### Note that all this will not be done, if the startup script will not be executed.
 RUN \
-    ls-l "${STARTUPDIR}" \
+    ls -la "${STARTUPDIR}" \
     &&  mkdir /sata1 \
     &&  chmod 666 /etc/passwd /etc/group \
     &&  echo "${HEADLESS_USER_GROUP_NAME}:x:${HEADLESS_USER_GROUP_ID}:" >> /etc/group \
