@@ -426,10 +426,7 @@ RUN \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
     &&  apt-get -y autoremove
     
-RUN git --version
-
-RUN /dockerstartup/set_user_permissions.sh /dockerstartup
-RUN /dockerstartup/set_user_permissions.sh /home/headless
+RUN pwd
 
 RUN \
         chmod 777 "${STARTUPDIR}"/*.sh \
