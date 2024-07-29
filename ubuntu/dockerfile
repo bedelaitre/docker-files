@@ -402,11 +402,6 @@ ENV \
     STARTUPDIR="/dockerstartup"
 
 COPY ./src/xfce-startup "${STARTUPDIR}"/
-# COPY ./src/tests "${HOME}"/tests/
-
-# COPY ./xfce/src/home/config "${HOME}"/.config/
-# COPY ./xfce/src/home/Desktop "${HOME}"/Desktop/
-# COPY ./xfce/src/home/readme*.md "${HOME}"/
 
 ### Note that the line 'chmod 666 /etc/passwd /etc/group' sets the "softer" permissions only temporary.
 ### It allows the user generator startup script to configure the user and the group correctly.
@@ -429,8 +424,12 @@ RUN \
 RUN pwd
 
 RUN \
-        chmod 777 "${STARTUPDIR}"/*.sh \
-    &&  ${STARTUPDIR}/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
+       chmod 777 "${STARTUPDIR}"/*.sh \
+    && "${STARTUPDIR}"/moi.sh
+
+RUN \
+       chmod 777 "${STARTUPDIR}"/*.sh \
+    && "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
 
