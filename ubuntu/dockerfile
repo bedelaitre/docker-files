@@ -25,8 +25,8 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true" ;' > /etc/apt/apt.conf.d/keep-cache
     
 RUN \
-    apt-mark hold tzdata \
-    && DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && apt-mark hold tzdata \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
     && apt-mark unhold tzdata
     
