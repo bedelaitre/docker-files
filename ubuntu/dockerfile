@@ -24,10 +24,10 @@ FROM ${BASEIMAGE}:${BASETAG} as stage_cache
 RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true" ;' > /etc/apt/apt.conf.d/keep-cache
     
-RUN debconf-set-selections <<< 'tzdata tzdata/Areas select Europe' \
-    && debconf-set-selections <<< 'tzdata tzdata/Zones/Etc select Paris' \
+RUN apt hold tzdata
     && apt-get update \
-    && apt-get upgrade
+    && apt-get upgrade \
+    && apt unhold tzdata
 
 ### embed the local '.g3-cache' from the build context
 ### note that the bound cache '/tmp/cache2' is ephemeral and all written data will be discarded automatically
