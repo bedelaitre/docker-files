@@ -425,11 +425,11 @@ RUN pwd
 
 RUN \
        chmod 777 "${STARTUPDIR}"/*.sh \
-    && "${STARTUPDIR}"/moi.sh
+    && /bin/bash "${STARTUPDIR}"/moi.sh
 
 RUN \
        chmod 777 "${STARTUPDIR}"/*.sh \
-    && "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
+    && /bin/bash "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
 
