@@ -26,7 +26,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     
 RUN \
     DEBIAN_FRONTEND=noninteractive apt-get update -y \
-    && apt-get upgrade -y
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 ### embed the local '.g3-cache' from the build context
 ### note that the bound cache '/tmp/cache2' is ephemeral and all written data will be discarded automatically
