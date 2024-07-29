@@ -426,10 +426,10 @@ RUN \
     &&  echo "${HEADLESS_USER_NAME}:$(cat ${STARTUPDIR}/.initial_sudo_password)" | chpasswd \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
     &&  apt-get -y autoremove
-
+    
+RUN /dockerstartup/set_user_permissions.sh
 RUN \
-        ls -la "${STARTUPDIR}" \
-    &&  chmod 777 "${STARTUPDIR}"/*.sh \
+        chmod 777 "${STARTUPDIR}"/*.sh \
     &&  ${STARTUPDIR}/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
