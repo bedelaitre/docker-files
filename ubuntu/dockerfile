@@ -41,9 +41,10 @@ RUN \
 
 FROM ${BASEIMAGE}:${BASETAG} as stage_essentials
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         gettext-base \
         gir1.2-rsvg-2.0 \
@@ -123,9 +124,10 @@ ENV \
     FEATURES_SCREENSHOOTING="${ARG_FEATURES_SCREENSHOOTING:+1}" \
     FEATURES_THUMBNAILING="${ARG_FEATURES_THUMBNAILING:+1}"
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mousepad \
         python3 \
