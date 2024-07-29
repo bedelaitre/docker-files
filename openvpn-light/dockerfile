@@ -16,6 +16,7 @@ RUN \
     && apt-get install -y \
     openvpn \
     curl \
+    net-tools \
     && rm -rf \
         /tmp/* \
     && rm -rf \

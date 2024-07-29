@@ -23,9 +23,13 @@ FROM ${BASEIMAGE}:${BASETAG} as stage_cache
 ### refresh the 'apt' cache
 RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true" ;' > /etc/apt/apt.conf.d/keep-cache
-RUN apt-get update \
-    && apt-get upgrade
-
+    
+RUN \
+    DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && apt-mark hold tzdata \
+    && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get upgrade -y \
+    && apt-mark unhold tzdata
+    
 ### embed the local '.g3-cache' from the build context
 ### note that the bound cache '/tmp/cache2' is ephemeral and all written data will be discarded automatically
 ### therefore copy its content into the another permanent cache '/tmp/g3-cache'
@@ -41,10 +45,12 @@ RUN \
 
 FROM ${BASEIMAGE}:${BASETAG} as stage_essentials
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         gettext-base \
         gir1.2-rsvg-2.0 \
         gpg \
@@ -54,19 +60,19 @@ RUN \
         sudo \
         tini \
         wget \
-		xz-utils \
-		nala \
-		cron \
-		dos2unix \
-		dconf-cli \
-		curl \
-		zip \
-		unzip \
-		ffmpeg \
-		tilix \
-		gedit \
-		galculator\
-		expect\
+	xz-utils \
+	nala \
+	cron \
+	dos2unix \
+	dconf-cli \
+	curl \
+	zip \
+	unzip \
+	ffmpeg \
+	tilix \
+	gedit \
+	galculator\
+	expect\
         default-jre \
         net-tools
 
@@ -81,9 +87,10 @@ ENV \
     FEATURES_BUILD_SLIM_XSERVER="${ARG_APT_NO_RECOMMENDS:+1}" \
     NO_AT_BRIDGE=1
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         dbus-x11 \
         xauth \
@@ -100,10 +107,11 @@ ARG ARG_APT_NO_RECOMMENDS
 
 ENV FEATURES_BUILD_SLIM_XFCE="${ARG_APT_NO_RECOMMENDS:+1}"
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
         xfce4 \
         xfce4-terminal \
         elementary-xfce-icon-theme
@@ -123,17 +131,20 @@ ENV \
     FEATURES_SCREENSHOOTING="${ARG_FEATURES_SCREENSHOOTING:+1}" \
     FEATURES_THUMBNAILING="${ARG_FEATURES_THUMBNAILING:+1}"
 
+# RUN \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
+#     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mousepad \
         python3 \
         systemctl \
-		calibre \
-		doublecmd-qt \
-		soundconverter \
+	calibre \
+	doublecmd-qt \
+	soundconverter \
         openvpn \
+	git \
         "${ARG_FEATURES_SCREENSHOOTING:+ristretto}" \
         "${ARG_FEATURES_SCREENSHOOTING:+xfce4-screenshooter}" \
         "${ARG_FEATURES_THUMBNAILING:+tumbler}"
@@ -164,7 +175,7 @@ RUN \
                 -q https://sourceforge.net/projects/tigervnc/files/stable/"${TIGERVNC_VERSION}"/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz \
                 -P /tmp/g3-cache/tigervnc ; \
         fi \
-    &&  tar xzf /tmp/g3-cache/tigervnc/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz --strip 1 -C / \
+    &&  tar xzf /tmp/g3-cache/tigervnc/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz --strip 1 -C / > /dev/null 2>&1 \
     &&  ln -s /usr/libexec/vncserver /usr/bin/vncserver \
     &&  sed -i 's/exec(@cmd);/print "@cmd";\nexec(@cmd);/g' /usr/libexec/vncserver
 
@@ -200,7 +211,8 @@ RUN \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     --mount=type=cache,from=stage_cache,sharing=locked,source=/tmp/g3-cache/,target=/tmp/g3-cache/ \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
+    DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         python3-numpy \
     &&  mkdir -p "${NOVNC_HOME}"/utils/websockify \
     &&  NOVNC_VERSION="${ARG_NOVNC_VERSION}" \
@@ -294,14 +306,15 @@ RUN \
                 -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
                 -P /tmp/g3-cache/chromium ; \
         fi \
-    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         /tmp/g3-cache/chromium/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
         /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
         /tmp/g3-cache/chromium/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
     &&  apt-mark hold chromium-browser
 
-COPY ./xfce-chromium/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-chromium/src/home/readme*.md "${HOME}"/
+# COPY ./xfce-chromium/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-chromium/src/home/readme*.md "${HOME}"/
 
 ### Chromium browser requires some presets
 ### Note that 'no-sandbox' flag is required, but intended for development only
@@ -346,7 +359,7 @@ Pin-Priority: 501" \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         firefox
 
-COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
 
 
 ### ##################
@@ -357,9 +370,9 @@ FROM stage_firefox as stage_firefox_plus
 
 ENV FEATURES_FIREFOX_PLUS=1
 
-COPY ./xfce-firefox/src/firefox.plus/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-firefox/src/firefox.plus/resources "${HOME}"/firefox.plus/
-COPY ./xfce-firefox/src/firefox.plus/home/readme*.md "${HOME}"/
+# COPY ./xfce-firefox/src/firefox.plus/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-firefox/src/firefox.plus/resources "${HOME}"/firefox.plus/
+# COPY ./xfce-firefox/src/firefox.plus/home/readme*.md "${HOME}"/
 
 RUN \
     chmod 744 "${HOME}"/firefox.plus/*.sh \
@@ -382,7 +395,6 @@ FROM ${ARG_MERGE_STAGE_BROWSER_BASE} as merge_stage_browser
 FROM ${ARG_FINAL_STAGE_BASE} as stage_final
 ARG ARG_FEATURES_OVERRIDING_ENVV
 ARG ARG_SUDO_INITIAL_PW
-ARG APP=expressvpn_3.73.0.0-1_amd64.deb
 
 ENV \
     FEATURES_OVERRIDING_ENVV="${ARG_FEATURES_OVERRIDING_ENVV:+1}" \
@@ -390,11 +402,6 @@ ENV \
     STARTUPDIR="/dockerstartup"
 
 COPY ./src/xfce-startup "${STARTUPDIR}"/
-COPY ./src/tests "${HOME}"/tests/
-
-COPY ./xfce/src/home/config "${HOME}"/.config/
-COPY ./xfce/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce/src/home/readme*.md "${HOME}"/
 
 ### Note that the line 'chmod 666 /etc/passwd /etc/group' sets the "softer" permissions only temporary.
 ### It allows the user generator startup script to configure the user and the group correctly.
@@ -404,16 +411,21 @@ COPY ./xfce/src/home/readme*.md "${HOME}"/
 ### You have to change it inside the container, if you want to keep it really secret.
 ### Note that all this will not be done, if the startup script will not be executed.
 RUN \
-    mkdir /sata1 \
-	&&  chmod 666 /etc/passwd /etc/group \
+        mkdir /sata1 \
+    &&  chmod 666 /etc/passwd /etc/group \
     &&  echo "${HEADLESS_USER_GROUP_NAME}:x:${HEADLESS_USER_GROUP_ID}:" >> /etc/group \
     &&  echo "${HEADLESS_USER_NAME}:x:${HEADLESS_USER_ID}:${HEADLESS_USER_GROUP_ID}:Default:${HOME}:/bin/bash" >> /etc/passwd \
     &&  echo "${HEADLESS_USER_NAME}  ALL=(ALL:ALL) ALL" | sudo tee /etc/sudoers.d/"${HEADLESS_USER_NAME}" \
     &&  echo "${ARG_SUDO_INITIAL_PW:-headless}" > "${STARTUPDIR}"/.initial_sudo_password \
     &&  echo "${HEADLESS_USER_NAME}:$(cat ${STARTUPDIR}/.initial_sudo_password)" | chpasswd \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
-    && "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}" \
-	&& apt-get -y autoremove
+    &&  apt-get -y autoremove
+    
+RUN pwd
+
+RUN \
+       chmod 777 "${STARTUPDIR}"/*.sh \
+    && /bin/bash "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
 
 USER "${HEADLESS_USER_ID}"
 
