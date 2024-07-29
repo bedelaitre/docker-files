@@ -27,8 +27,8 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean ; \
 RUN \
     apt-mark hold tzdata \
     && DEBIAN_FRONTEND=noninteractive apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
-    apt-mark unhold tzdata
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    && apt-mark unhold tzdata
     
 ### embed the local '.g3-cache' from the build context
 ### note that the bound cache '/tmp/cache2' is ephemeral and all written data will be discarded automatically
