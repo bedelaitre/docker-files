@@ -134,6 +134,7 @@ RUN \
 		doublecmd-qt \
 		soundconverter \
         openvpn \
+	git \
         "${ARG_FEATURES_SCREENSHOOTING:+ristretto}" \
         "${ARG_FEATURES_SCREENSHOOTING:+xfce4-screenshooter}" \
         "${ARG_FEATURES_THUMBNAILING:+tumbler}"
