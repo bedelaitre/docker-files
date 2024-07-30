@@ -240,6 +240,7 @@ WORKDIR "${HOME}"
 
 ### add '.bashrc' and similar resources
 COPY ./src/home "${HOME}"/
+RUN chown -R ${HEADLESS_USER_NAME}:${HEADLESS_USER_GROUP_NAME} ${HOME}
 
 #################
 ### stage_firefox
