@@ -2,15 +2,9 @@
 #set -e     # ne pas utiliser
 #set -u     # ne pas utiliser
 
-if [ -n "$DEBUG" ]; then
-    echo "Utilisateur actuel : $(id -u):$(id -g)"
-    verbose="-v"
-else
-    verbose=""
-fi
-
 ### Corriger les permissions des fichiers
 for i in "$@"; do
+
 
     ### définir les permissions des répertoires
     ### de manière récursive, mais en ignorant les répertoires point dans $HOME
