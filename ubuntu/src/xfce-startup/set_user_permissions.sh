@@ -21,6 +21,4 @@ changePermissions() {
 changePermissions "${HOME}"
 changePermissions "${STARTUPDIR}"
 
-### le script de démarrage est spécial
-chmod 755 "${STARTUPDIR}/startup.sh"
 

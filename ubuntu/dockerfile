@@ -428,8 +428,13 @@ RUN \
 WORKDIR "${STARTUPDIR}"
 
 RUN \
-    ls -la && chmod +x ./set_user_permissions.sh \
-    && ./set_user_permissions.sh
+    ls -la && chmod +x ./set_user_permissions.sh
+
+RUN \
+    ./set_user_permissions.sh
+    
+RUN \
+    chmod 755 "${STARTUPDIR}/startup.sh"
     
 USER "${HEADLESS_USER_ID}"
 
