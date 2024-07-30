@@ -312,7 +312,6 @@ FROM ${ARG_MERGE_STAGE_BROWSER_BASE} as merge_stage_browser
 FROM ${ARG_FINAL_STAGE_BASE} as stage_final
 ARG ARG_FEATURES_OVERRIDING_ENVV
 ARG ARG_SUDO_INITIAL_PW
-ARG APP=expressvpn_3.73.0.0-1_amd64.deb
 
 ENV \
     FEATURES_OVERRIDING_ENVV="${ARG_FEATURES_OVERRIDING_ENVV:+1}" \
@@ -320,11 +319,6 @@ ENV \
     STARTUPDIR="/dockerstartup"
 
 COPY ./src/xfce-startup "${STARTUPDIR}"/
-COPY ./src/tests "${HOME}"/tests/
-
-COPY ./xfce/src/home/config "${HOME}"/.config/
-COPY ./xfce/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce/src/home/readme*.md "${HOME}"/
 
 ### Note that the line 'chmod 666 /etc/passwd /etc/group' sets the "softer" permissions only temporary.
 ### It allows the user generator startup script to configure the user and the group correctly.
