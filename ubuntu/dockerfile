@@ -280,7 +280,7 @@ RUN \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         firefox
 
-COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
+# COPY ./xfce-firefox/src/home/Desktop "${HOME}"/Desktop/
 
 
 ### ##################
