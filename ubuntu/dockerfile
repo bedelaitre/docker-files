@@ -425,6 +425,7 @@ RUN \
     chmod 777 "${STARTUPDIR}"/*.sh
 
 RUN \
+    cat "${STARTUPDIR}"/set_user_permissions.sh && \
     /bin/bash "${STARTUPDIR}"/set_user_permissions.sh
         
 RUN \
