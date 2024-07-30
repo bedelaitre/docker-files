@@ -425,11 +425,10 @@ RUN \
     chmod 777 "${STARTUPDIR}"/*.sh
 
 RUN \
-    cat "${STARTUPDIR}"/set_user_permissions.sh && \
-    /bin/bash "${STARTUPDIR}"/set_user_permissions.sh
+    "${STARTUPDIR}"/set_user_permissions.sh
         
 RUN \
-    /bin/bash "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
+    "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}"
     
 USER "${HEADLESS_USER_ID}"
 
