@@ -241,56 +241,6 @@ WORKDIR "${HOME}"
 ### add '.bashrc' and similar resources
 COPY ./src/home "${HOME}"/
 
-
-##################
-### stage_chromium
-##################
-
-FROM merge_stage_vnc as stage_chromium
-ARG ARG_APT_NO_RECOMMENDS
-ARG ARG_CHROMIUM_DISTRO
-ARG ARG_CHROMIUM_VERSION
-
-ENV \
-    FEATURES_BUILD_SLIM_CHROMIUM="${ARG_APT_NO_RECOMMENDS:+1}" \
-    FEATURES_CHROMIUM=1
-
-RUN \
-    CHROMIUM_VERSION="${ARG_CHROMIUM_VERSION}" \
-    CHROMIUM_DISTRO="${ARG_CHROMIUM_DISTRO}" \
-    &&  if [ ! -s /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb ] ; then \
-            wget --show-progress --progress=bar:force:noscroll \
-                -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
-                -P /tmp/g3-cache/chromium ; \
-        fi \
-    &&  if [ ! -s /tmp/g3-cache/chromium/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb ] ; then \
-            wget --show-progress --progress=bar:force:noscroll \
-                -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
-                -P /tmp/g3-cache/chromium ; \
-        fi \
-    &&  if [ ! -s /tmp/g3-cache/chromium/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb ] ; then \
-            wget --show-progress --progress=bar:force:noscroll \
-                -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
-                -P /tmp/g3-cache/chromium ; \
-        fi \
-    &&  DEBIAN_FRONTEND=noninteractive apt-get update -y \
-    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
-        /tmp/g3-cache/chromium/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
-        /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
-        /tmp/g3-cache/chromium/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
-    &&  apt-mark hold chromium-browser
-
-COPY ./xfce-chromium/src/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-chromium/src/home/readme*.md "${HOME}"/
-
-### Chromium browser requires some presets
-### Note that 'no-sandbox' flag is required, but intended for development only
-RUN \
-    echo \
-    "CHROMIUM_FLAGS='--no-sandbox --disable-gpu --user-data-dir --window-size=${VNC_RESOLUTION%x*},${VNC_RESOLUTION#*x} --window-position=0,0'" \
-    > "${HOME}"/.chromium-browser.init
-
-
 #################
 ### stage_firefox
 #################
