@@ -1,24 +1,39 @@
-#!/bin/sh
-set -e     # ne pas utiliser
-set -u     # ne pas utiliser
+#!/bin/bash
+#set -e     # do not use
+#set -u     # do not use
 
-### Corriger les permissions des fichiers
-changePermissions() {
-    ### définir les permissions des répertoires
-    ### de manière récursive, mais en ignorant les répertoires point dans $HOME
-    find "$1" -type d -not -path "${HOME}/.*" -exec chmod 755 {} +
+main() {
+    local verbose=""
 
-    ### définir les permissions des fichiers
-    ### de manière récursive, mais en ignorant les fichiers point et les répertoires point dans $HOME
-    find "$1" -type f -not -path "${HOME}/.*" -exec chmod 644 {} +
+    if [[ -n "${DEBUG}" ]] ; then
+        echo "Current user: $(id -u):$(id -g)"
+        verbose="-v"
+    fi
 
-    ### permissions spécifiques des fichiers
-    ### de manière récursive, mais en ignorant les répertoires point dans $HOME
-    find "$1" -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod 744 {} +
-    find "$1" -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod 744 {} +
+    ### Fix file permissions
+    for i in "$@" ; do
+
+        if [[ -n "${verbose}" ]] ; then
+
+            echo "Fixing permissions for: ${i}"
+        fi
+
+        ### set directory permissions
+        ### recursively, but skipping dot-directories in $HOME
+        find "$i" -type d -not -path "${HOME}/.*" -exec chmod ${verbose} 755 {} +
+
+        ### set file permissions
+        ### recursively, but skipping dot-files and dot-directories in $HOME
+        find "$i" -type f -not -path "${HOME}/.*" -exec chmod ${verbose} 644 {} +
+
+        ### specific file permissions
+        ### recursively, but skipping dot-directories in $HOME
+        find "$i"/ -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod ${verbose} 744 {} +
+        find "$i"/ -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod ${verbose} 744 {} +
+    done
+
+    ### startup script is special
+    chmod 755 "${STARTUPDIR}"/startup.sh
 }
 
-changePermissions "${HOME}"
-changePermissions "${STARTUPDIR}"
-
-
+main $@
