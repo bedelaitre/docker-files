@@ -425,7 +425,7 @@ RUN \
     chmod 777 "${STARTUPDIR}"/*.sh
 
 RUN \
-    /bin/sh "${STARTUPDIR}/set_user_permissions.sh ${STARTUPDIR} ${HOME}"
+    /bin/sh -c "${STARTUPDIR}/set_user_permissions.sh ${STARTUPDIR} ${HOME}"
     
 USER "${HEADLESS_USER_ID}"
 
