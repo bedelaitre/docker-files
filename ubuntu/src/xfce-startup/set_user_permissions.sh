@@ -2,7 +2,8 @@
 #set -e     # do not use
 #set -u     # do not use
 
-main(){
+main() {
+    echo "coucou"
     local verbose=""
 
     if [[ -n "${DEBUG}" ]] ; then
