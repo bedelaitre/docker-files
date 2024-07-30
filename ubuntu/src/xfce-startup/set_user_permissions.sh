@@ -1,29 +1,29 @@
 #!/bin/bash
-set -e     # do not use
-#set -u     # do not use
+#set -e     # ne pas utiliser
+#set -u     # ne pas utiliser
 
-    if [[ -n "${DEBUG}" ]] ; then
-        echo "Current user: $(id -u):$(id -g)"
-        verbose="-v"
-    fi
+if [[ -n "${DEBUG}" ]] ; then
+    echo "Utilisateur actuel : $(id -u):$(id -g)"
+    verbose="-v"
+fi
 
-    ### Fix file permissions
-    for i in "$@" ; do
+### Corriger les permissions des fichiers
+for i in "$@" ; do
 
-        ### set directory permissions
-        ### recursively, but skipping dot-directories in $HOME
-        find "$i" -type d -not -path "${HOME}/.*" -exec chmod ${verbose} 755 {} +
+    ### définir les permissions des répertoires
+    ### de manière récursive, mais en ignorant les répertoires point dans $HOME
+    find "$i" -type d -not -path "${HOME}/.*" -exec chmod ${verbose} 755 {} +
 
-        ### set file permissions
-        ### recursively, but skipping dot-files and dot-directories in $HOME
-        find "$i" -type f -not -path "${HOME}/.*" -exec chmod ${verbose} 644 {} +
+    ### définir les permissions des fichiers
+    ### de manière récursive, mais en ignorant les fichiers point et les répertoires point dans $HOME
+    find "$i" -type f -not -path "${HOME}/.*" -exec chmod ${verbose} 644 {} +
 
-        ### specific file permissions
-        ### recursively, but skipping dot-directories in $HOME
-        find "$i"/ -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod ${verbose} 744 {} +
-        find "$i"/ -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod ${verbose} 744 {} +
-    done
+    ### permissions spécifiques des fichiers
+    ### de manière récursive, mais en ignorant les répertoires point dans $HOME
+    find "$i"/ -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod ${verbose} 744 {} +
+    find "$i"/ -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod ${verbose} 744 {} +
+done
 
-    ### startup script is special
-    chmod 755 "${STARTUPDIR}"/startup.sh
+### le script de démarrage est spécial
+chmod 755 "${STARTUPDIR}"/startup.sh
 
