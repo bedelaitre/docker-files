@@ -1,9 +1,9 @@
 #!/bin/bash
-#set -e     # do not use
+set -e     # do not use
 #set -u     # do not use
 
-main() {
-    echo "coucou"
+myFunction() 
+{
     local verbose=""
 
     if [[ -n "${DEBUG}" ]] ; then
@@ -37,4 +37,4 @@ main() {
     chmod 755 "${STARTUPDIR}"/startup.sh
 }
 
-main $@
+myFunction $@
