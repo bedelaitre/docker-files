@@ -272,6 +272,10 @@ Pin-Priority: 501" \
     > /etc/apt/preferences.d/mozilla-firefox
 
 RUN \
+       apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9BDB3D89CE49EC21 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AEBDF4819BE21867 
+
+RUN \
        apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         firefox
