@@ -6,21 +6,21 @@
 changePermissions() {
     ### définir les permissions des répertoires
     ### de manière récursive, mais en ignorant les répertoires point dans $HOME
-    find "$1" -type d -not -path "${HOME}/.*" -exec chmod $verbose 755 {} +
+    find "$1" -type d -not -path "${HOME}/.*" -exec chmod 755 {} +
 
     ### définir les permissions des fichiers
     ### de manière récursive, mais en ignorant les fichiers point et les répertoires point dans $HOME
-    find "$1" -type f -not -path "${HOME}/.*" -exec chmod $verbose 644 {} +
+    find "$1" -type f -not -path "${HOME}/.*" -exec chmod 644 {} +
 
     ### permissions spécifiques des fichiers
     ### de manière récursive, mais en ignorant les répertoires point dans $HOME
-    find "$1" -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod $verbose 744 {} +
-    find "$1" -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod $verbose 744 {} +
+    find "$1" -type f -not -path "${HOME}/.*" -name '*.sh' -exec chmod 744 {} +
+    find "$1" -type f -not -path "${HOME}/.*" -name '*.desktop' -exec chmod 744 {} +
 }
 
 changePermissions "${HOME}"
 changePermissions "${STARTUPDIR}"
 
 ### le script de démarrage est spécial
-chmod 755 "${STARTUPDIR}/startup.sh"
+chmod 755 "${STARTUPDIR}"/startup.sh
 
