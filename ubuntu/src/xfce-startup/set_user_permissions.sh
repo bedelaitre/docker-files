@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e     # do not use
 #set -u     # do not use
-myFunction() {
-    local verbose=""
 
     if [[ -n "${DEBUG}" ]] ; then
         echo "Current user: $(id -u):$(id -g)"
@@ -11,11 +9,6 @@ myFunction() {
 
     ### Fix file permissions
     for i in "$@" ; do
-
-        if [[ -n "${verbose}" ]] ; then
-
-            echo "Fixing permissions for: ${i}"
-        fi
 
         ### set directory permissions
         ### recursively, but skipping dot-directories in $HOME
@@ -33,6 +26,4 @@ myFunction() {
 
     ### startup script is special
     chmod 755 "${STARTUPDIR}"/startup.sh
-}
 
-myFunction $@
