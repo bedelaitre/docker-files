@@ -33,7 +33,8 @@ RUN apt-get update \
 FROM ${BASEIMAGE}:${BASETAG} as stage_essentials
 
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         gettext-base \
         gir1.2-rsvg-2.0 \
         gpg \
@@ -89,7 +90,8 @@ ARG ARG_APT_NO_RECOMMENDS
 ENV FEATURES_BUILD_SLIM_XFCE="${ARG_APT_NO_RECOMMENDS:+1}"
 
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+       DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         xfce4 \
         xfce4-terminal \
         elementary-xfce-icon-theme
@@ -110,7 +112,8 @@ ENV \
     FEATURES_THUMBNAILING="${ARG_FEATURES_THUMBNAILING:+1}"
 
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mousepad \
         python3 \
         systemctl \
@@ -178,7 +181,8 @@ ENV \
     NOVNC_PORT="${ARG_NOVNC_PORT:-6901}"
 
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
+    DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         python3-numpy \
     &&  mkdir -p "${NOVNC_HOME}"/utils/websockify \
     &&  NOVNC_VERSION="${ARG_NOVNC_VERSION}" \
@@ -269,6 +273,7 @@ RUN \
                 -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_"${CHROMIUM_VERSION}"_all.deb \
                 -P /tmp/g3-cache/chromium ; \
         fi \
+    &&  DEBIAN_FRONTEND=noninteractive apt-get update -y \
     &&  DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         /tmp/g3-cache/chromium/chromium-codecs-ffmpeg_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
         /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb \
