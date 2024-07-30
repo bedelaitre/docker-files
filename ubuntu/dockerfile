@@ -338,7 +338,8 @@ RUN \
     &&  echo "${HEADLESS_USER_NAME}:$(cat ${STARTUPDIR}/.initial_sudo_password)" | chpasswd \
     &&  ln -s "${HOME}"/readme.md "${HOME}"/Desktop/README \
     && "${STARTUPDIR}"/set_user_permissions.sh "${STARTUPDIR}" "${HOME}" \
-	&& apt-get -y autoremove
+	&& apt-get -y autoremove \
+    && chmod 755 "${STARTUPDIR}"/startup.sh
 
 USER "${HEADLESS_USER_ID}"
 
