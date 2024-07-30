@@ -42,8 +42,6 @@ RUN \
 FROM ${BASEIMAGE}:${BASETAG} as stage_essentials
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         gettext-base \
         gir1.2-rsvg-2.0 \
@@ -83,8 +81,6 @@ ENV \
     NO_AT_BRIDGE=1
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         dbus-x11 \
         xauth \
@@ -102,8 +98,6 @@ ARG ARG_APT_NO_RECOMMENDS
 ENV FEATURES_BUILD_SLIM_XFCE="${ARG_APT_NO_RECOMMENDS:+1}"
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         xfce4 \
         xfce4-terminal \
@@ -125,8 +119,6 @@ ENV \
     FEATURES_THUMBNAILING="${ARG_FEATURES_THUMBNAILING:+1}"
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mousepad \
         python3 \
@@ -155,9 +147,6 @@ ARG ARG_TIGERVNC_DISTRO=x86_64
 ARG ARG_TIGERVNC_VERSION=1.13.1
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/tmp/g3-cache/,target=/tmp/g3-cache/ \
     TIGERVNC_VERSION="${ARG_TIGERVNC_VERSION}" \
     TIGERVNC_DISTRO="${ARG_TIGERVNC_DISTRO}" \
     &&  if [ ! -s /tmp/g3-cache/tigervnc/tigervnc-"${TIGERVNC_VERSION}"."${TIGERVNC_DISTRO}".tar.gz ] ; then  \
@@ -198,9 +187,6 @@ ENV \
     NOVNC_PORT="${ARG_NOVNC_PORT:-6901}"
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/tmp/g3-cache/,target=/tmp/g3-cache/ \
     DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         python3-numpy \
     &&  mkdir -p "${NOVNC_HOME}"/utils/websockify \
@@ -275,9 +261,6 @@ ENV \
     FEATURES_CHROMIUM=1
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/tmp/g3-cache/,target=/tmp/g3-cache/ \
     CHROMIUM_VERSION="${ARG_CHROMIUM_VERSION}" \
     CHROMIUM_DISTRO="${ARG_CHROMIUM_DISTRO}" \
     &&  if [ ! -s /tmp/g3-cache/chromium/chromium-browser_"${CHROMIUM_VERSION}"_"${CHROMIUM_DISTRO}".deb ] ; then \
@@ -324,13 +307,11 @@ ENV \
     FEATURES_FIREFOX=1
 
 RUN \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/cache/apt,target=/var/cache/apt \
-    --mount=type=cache,from=stage_cache,sharing=locked,source=/var/lib/apt,target=/var/lib/apt \
     KEY_SERVER_URL="keyserver.ubuntu.com" \
     FIREFOX_PPA_FINGERPRINT="0x0AB215679C571D1C8325275B9BDB3D89CE49EC21" \
     FIREFOX_PPA_GPG_KEY="mozillateam-ubuntu-ppa.gpg" \
-    && gpg --status-fd 1 --keyserver "${KEY_SERVER_URL}" --recv-keys "${FIREFOX_PPA_FINGERPRINT}" \
     && gpg --export "${FIREFOX_PPA_FINGERPRINT}" > "${FIREFOX_PPA_GPG_KEY}" \
+    && gpg --status-fd 1 --keyserver "${KEY_SERVER_URL}" --recv-keys "${FIREFOX_PPA_FINGERPRINT}" \
     && sudo install -o root -g root -m 644 "${FIREFOX_PPA_GPG_KEY}" /etc/apt/trusted.gpg.d/ \
     && gpg --batch --yes --delete-keys "${FIREFOX_PPA_FINGERPRINT}" \
     && rm "${FIREFOX_PPA_GPG_KEY}" \
