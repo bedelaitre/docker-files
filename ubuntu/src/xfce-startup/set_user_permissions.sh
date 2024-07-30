@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e     # do not use
 #set -u     # do not use
-
-myFunction() 
+myFunction()
 {
     local verbose=""
 
