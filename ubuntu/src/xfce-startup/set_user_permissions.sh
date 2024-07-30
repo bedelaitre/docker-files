@@ -1,6 +1,6 @@
 #!/bin/sh
-#set -e     # ne pas utiliser
-#set -u     # ne pas utiliser
+set -e     # ne pas utiliser
+set -u     # ne pas utiliser
 
 ### Corriger les permissions des fichiers
 changePermissions() {
@@ -22,5 +22,5 @@ changePermissions "${HOME}"
 changePermissions "${STARTUPDIR}"
 
 ### le script de démarrage est spécial
-chmod 755 "${STARTUPDIR}"/startup.sh
+chmod 755 "${STARTUPDIR}/startup.sh"
 
