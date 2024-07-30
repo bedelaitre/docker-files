@@ -422,10 +422,11 @@ RUN \
     &&  apt-get -y autoremove
     
 RUN \
-    chmod 777 "${STARTUPDIR}"/*.sh
+    chmod 777 "${STARTUPDIR}"/*.sh \
+    && chmod 777 "${STARTUPDIR}"
 
 RUN \
-    /bin/sh -c "${STARTUPDIR}/set_user_permissions.sh ${STARTUPDIR} ${HOME}"
+    /bin/sh ${STARTUPDIR}/set_user_permissions.sh
     
 USER "${HEADLESS_USER_ID}"
 
