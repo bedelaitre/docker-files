@@ -291,10 +291,6 @@ FROM stage_firefox as stage_firefox_plus
 
 ENV FEATURES_FIREFOX_PLUS=1
 
-COPY ./xfce-firefox/src/firefox.plus/home/Desktop "${HOME}"/Desktop/
-COPY ./xfce-firefox/src/firefox.plus/resources "${HOME}"/firefox.plus/
-COPY ./xfce-firefox/src/firefox.plus/home/readme*.md "${HOME}"/
-
 RUN \
     chmod 744 "${HOME}"/firefox.plus/*.sh \
     && envsubst <"${HOME}/Desktop/Copy FF Preferences.desktop" >/tmp/esub.tmp && mv -f /tmp/esub.tmp "${HOME}/Desktop/Copy FF Preferences.desktop" \
