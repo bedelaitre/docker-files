@@ -440,5 +440,4 @@ LABEL \
     org.opencontainers.image.description="Headless Ubuntu/Xfce/VNC/noVNC containers with Internet browsers and doublecommander and calibre" \
     org.opencontainers.image.title="bedelaitre/ubuntu-xfce-firefox" \
     org.opencontainers.image.version="${ARG_DOCKER_TAG}"
-	
-	\ No newline at end of file
+
