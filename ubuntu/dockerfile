@@ -254,6 +254,7 @@ ENV \
 
 RUN \
     KEY_SERVER_URL="keyserver.ubuntu.com" \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys
     FIREFOX_PPA_FINGERPRINT="0x0AB215679C571D1C8325275B9BDB3D89CE49EC21" \
     FIREFOX_PPA_GPG_KEY="mozillateam-ubuntu-ppa.gpg" \
     && gpg --export "${FIREFOX_PPA_FINGERPRINT}" > "${FIREFOX_PPA_GPG_KEY}" \
@@ -269,8 +270,10 @@ RUN \
 "Package: firefox*\n\
 Pin: release o=LP-PPA-mozillateam\n\
 Pin-Priority: 501" \
-    > /etc/apt/preferences.d/mozilla-firefox \
-    && apt-get update \
+    > /etc/apt/preferences.d/mozilla-firefox
+
+RUN \
+       apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y "${ARG_APT_NO_RECOMMENDS:+--no-install-recommends}" \
         firefox
 
